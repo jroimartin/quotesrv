@@ -62,7 +62,7 @@ func listQuotes(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f.Close()
 
-	if _, err := io.Copy(w, f); err != nil {
+	if _, err = io.Copy(w, f); err != nil {
 		errorResponse(w, err)
 		return
 	}
@@ -86,7 +86,7 @@ func addQuote(w http.ResponseWriter, r *http.Request) {
 	}
 	quote := re.ReplaceAllString(string(bQuote), " ") + "\n"
 
-	if _, err := f.WriteString(quote); err != nil {
+	if _, err = f.WriteString(quote); err != nil {
 		errorResponse(w, err)
 		return
 	}
