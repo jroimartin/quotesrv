@@ -19,10 +19,10 @@ Usage of quotesrv:
   -auth=false: enable basic authentication
   -cert="cert.pem": certificate file
   -key="key.pem": private key file
-  -pass="s3cr3t": password used for basic authentication
-  -quotesfile="quotes.txt": file where quotes will be stored
+  -pass="s3cr3t": basic auth password
+  -quotesfile="quotes.txt": quotes file
   -tls=false: enable TLS
-  -user="user": username used for basic authentication
+  -user="user": basic auth username
 ```
 
 Run an unauthenticated server over HTTP listening on IP address 1.1.1.1 and
