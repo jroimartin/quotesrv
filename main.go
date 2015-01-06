@@ -18,8 +18,12 @@ import (
 var (
 	addr       = flag.String("addr", ":8001", "HTTP service address")
 	quotesFile = flag.String("quotesfile", "quotes.txt", "file where quotes will be stored")
+	auth       = flag.Bool("auth", false, "enable basic authentication")
 	user       = flag.String("user", "user", "username used for basic authentication")
 	pass       = flag.String("pass", "s3cr3t", "password used for basic authentication")
+	tls        = flag.Bool("tls", false, "enable TLS")
+	certFile   = flag.String("cert", "cert.pem", "certificate file")
+	keyFile    = flag.String("key", "key.pem", "private key file")
 	re         = regexp.MustCompile(`[\r\n]+`)
 )
 
@@ -32,7 +36,13 @@ func main() {
 
 	logger := log.New(os.Stdout, "[quotesrv] ", log.LstdFlags)
 	logHandler := olog.NewLogHandler(logger, logLine)
-	basicHandler := basic.NewBasicHandler("Quotes System", *user, *pass)
+
+	var basicHandler http.Handler
+	if *auth {
+		basicHandler = basic.NewBasicHandler("Quotes System", *user, *pass)
+	} else {
+		basicHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+	}
 
 	s.RouteDefault(http.NotFoundHandler(), orujo.M(logHandler))
 
@@ -48,7 +58,11 @@ func main() {
 		orujo.M(logHandler),
 	).Methods("POST")
 
-	logger.Fatalln(s.ListenAndServe())
+	if *tls {
+		logger.Fatalln(s.ListenAndServeTLS(*certFile, *keyFile))
+	} else {
+		logger.Fatalln(s.ListenAndServe())
+	}
 }
 
 func listQuotes(w http.ResponseWriter, r *http.Request) {
