@@ -17,10 +17,10 @@ import (
 
 var (
 	addr       = flag.String("addr", ":8001", "HTTP service address")
-	quotesFile = flag.String("quotesfile", "quotes.txt", "file where quotes will be stored")
+	quotesFile = flag.String("quotesfile", "quotes.txt", "quotes file")
 	auth       = flag.Bool("auth", false, "enable basic authentication")
-	user       = flag.String("user", "user", "username used for basic authentication")
-	pass       = flag.String("pass", "s3cr3t", "password used for basic authentication")
+	user       = flag.String("user", "user", "basic auth username")
+	pass       = flag.String("pass", "s3cr3t", "basic auth password")
 	tls        = flag.Bool("tls", false, "enable TLS")
 	certFile   = flag.String("cert", "cert.pem", "certificate file")
 	keyFile    = flag.String("key", "key.pem", "private key file")
