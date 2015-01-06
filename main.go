@@ -37,23 +37,23 @@ func main() {
 	logger := log.New(os.Stdout, "[quotesrv] ", log.LstdFlags)
 	logHandler := olog.NewLogHandler(logger, logLine)
 
-	var basicHandler http.Handler
+	var authHandler http.Handler
 	if *auth {
-		basicHandler = basic.NewBasicHandler("Quotes System", *user, *pass)
+		authHandler = basic.NewBasicHandler("Quotes System", *user, *pass)
 	} else {
-		basicHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+		authHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 	}
 
 	s.RouteDefault(http.NotFoundHandler(), orujo.M(logHandler))
 
 	s.Route(`^/$`,
-		basicHandler,
+		authHandler,
 		http.HandlerFunc(listQuotes),
 		orujo.M(logHandler),
 	).Methods("GET")
 
 	s.Route(`^/$`,
-		basicHandler,
+		authHandler,
 		http.HandlerFunc(addQuote),
 		orujo.M(logHandler),
 	).Methods("POST")
